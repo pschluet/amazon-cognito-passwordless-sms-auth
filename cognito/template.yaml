@@ -4,21 +4,21 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  Amazon Cognito User Pool with Passwordless E-Mail Auth configured
+  Amazon Cognito User Pool with Passwordless SMS Auth configured
 
 Metadata:
   AWS::ServerlessRepo::Application:
-    Name: amazon-cognito-passwordless-email-auth
+    Name: amazon-cognito-passwordless-sms-auth
     Description: >
-      An Amazon Cognito user pool, pre-configured with AWS Lambda triggers to implement passwordless e-mail auth
+      An Amazon Cognito user pool, pre-configured with AWS Lambda triggers to implement passwordless SMS auth
     Author: AWS Samples
     SpdxLicenseId: MIT-0
     LicenseUrl: LICENSE
     ReadmeUrl: README.md
     Labels: ['cognito', 'passwordless', 'authentication', 'auth', 'sample']
-    HomepageUrl: https://github.com/aws-samples/amazon-cognito-passwordless-email-auth/tree/master/cognito
+    HomepageUrl: https://github.com/mats16/amazon-cognito-passwordless-sms-auth/tree/master/cognito
     SemanticVersion: 0.1.1
-    SourceCodeUrl: https://github.com/aws-samples/amazon-cognito-passwordless-email-auth/tree/master/cognito
+    SourceCodeUrl: https://github.com/mats16/amazon-cognito-passwordless-sms-auth/tree/master/cognito
 
 Globals:
   Function:
@@ -28,9 +28,6 @@ Parameters:
   UserPoolName:
     Type: String
     Description: The name you want the User Pool to be created with
-  SESFromAddress:
-    Type: String
-    Description: The e-mail address to send the secret login code from
 
 Resources:
   DefineAuthChallenge:
@@ -46,15 +43,12 @@ Resources:
       CodeUri: lambda-triggers/create-auth-challenge/
       Handler: create-auth-challenge.handler
       Runtime: nodejs8.10
-      Environment:
-        Variables:
-          SES_FROM_ADDRESS: !Ref SESFromAddress
       Policies:
         - Version: "2012-10-17"
           Statement:
             - Effect: Allow
               Action:
-                - ses:SendEmail
+                - sns:Publish
               Resource: "*"
 
   VerifyAuthChallengeResponse:
@@ -80,8 +74,7 @@ Resources:
           AttributeDataType: String
           Mutable: true
           Required: true
-        - Name: email
-          AttributeDataType: String
+        - Name: phone_number
           Mutable: true
           Required: true
       Policies:
@@ -92,7 +85,7 @@ Resources:
           RequireSymbols: false
           RequireUppercase: false
       UsernameAttributes:
-        - email
+        - phone_number
       MfaConfiguration: "OFF"
       LambdaConfig:
         CreateAuthChallenge: !GetAtt CreateAuthChallenge.Arn
@@ -132,7 +125,7 @@ Resources:
   UserPoolClient:
     Type: "AWS::Cognito::UserPoolClient"
     Properties:
-      ClientName: email-auth-client
+      ClientName: sms-auth-client
       GenerateSecret: false
       UserPoolId: !Ref UserPool
       ExplicitAuthFlows:

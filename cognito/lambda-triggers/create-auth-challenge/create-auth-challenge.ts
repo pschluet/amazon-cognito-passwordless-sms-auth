@@ -3,9 +3,9 @@
 
 import { CognitoUserPoolTriggerHandler } from 'aws-lambda';
 import { randomDigits } from 'crypto-secure-random-digit';
-import { SES } from 'aws-sdk';
+import { SNS } from 'aws-sdk';
 
-const ses = new SES();
+const sns = new SNS({apiVersion: '2010-03-31'})
 
 export const handler: CognitoUserPoolTriggerHandler = async event => {
 
@@ -15,7 +15,7 @@ export const handler: CognitoUserPoolTriggerHandler = async event => {
         // This is a new auth session
         // Generate a new secret login code and mail it to the user
         secretLoginCode = randomDigits(6).join('');
-        await sendEmail(event.request.userAttributes.email, secretLoginCode);
+        await sendSMS(event.request.userAttributes.phone_number, secretLoginCode);
 
     } else {
 
@@ -28,7 +28,7 @@ export const handler: CognitoUserPoolTriggerHandler = async event => {
     }
 
     // This is sent back to the client app
-    event.response.publicChallengeParameters = { email: event.request.userAttributes.email };
+    event.response.publicChallengeParameters = { phone_number: event.request.userAttributes.phone_number };
 
     // Add the secret login code to the private challenge parameters
     // so it can be verified by the "Verify Auth Challenge Response" trigger
@@ -41,27 +41,10 @@ export const handler: CognitoUserPoolTriggerHandler = async event => {
     return event;
 };
 
-async function sendEmail(emailAddress: string, secretLoginCode: string) {
-    const params: SES.SendEmailRequest = {
-        Destination: { ToAddresses: [emailAddress] },
-        Message: {
-            Body: {
-                Html: {
-                    Charset: 'UTF-8',
-                    Data: `<html><body><p>This is your secret login code:</p>
-                           <h3>${secretLoginCode}</h3></body></html>`
-                },
-                Text: {
-                    Charset: 'UTF-8',
-                    Data: `Your secret login code: ${secretLoginCode}`
-                }
-            },
-            Subject: {
-                Charset: 'UTF-8',
-                Data: 'Your secret login code'
-            }
-        },
-        Source: process.env.SES_FROM_ADDRESS!
+async function sendSMS(phone_number: string, secretLoginCode: string) {
+    const params = {
+        Message: `Your secret login code: ${secretLoginCode}`,
+        PhoneNumber: `${phone_number}`,
     };
-    await ses.sendEmail(params).promise();
+    await sns.publish(params).promise();
 }
