@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "cognito-email-auth-client": {
+    "cognito-sms-auth-client": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/cognito-email-auth-client",
+            "outputPath": "dist/cognito-sms-auth-client",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -66,25 +66,25 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "cognito-email-auth-client:build"
+            "browserTarget": "cognito-sms-auth-client:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "cognito-email-auth-client:build:production"
+              "browserTarget": "cognito-sms-auth-client:build:production"
             },
             "local": {
-              "browserTarget": "cognito-email-auth-client:build:local"
+              "browserTarget": "cognito-sms-auth-client:build:local"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "cognito-email-auth-client:build"
+            "browserTarget": "cognito-sms-auth-client:build"
           }
         }
       }
     }
   },
-  "defaultProject": "cognito-email-auth-client"
+  "defaultProject": "cognito-sms-auth-client"
 }

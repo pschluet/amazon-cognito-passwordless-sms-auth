@@ -8,7 +8,7 @@
   <mat-card-header>
     <mat-icon mat-card-avatar>lock</mat-icon>
     <mat-card-title>Please Sign Up</mat-card-title>
-    <mat-card-subtitle>We'd be happy to have you on board!</mat-card-subtitle>
+    <mat-card-subtitle>We'd be happy to have you on board!<br>The phone number must include <b>the country code</b>. (Example: +1 or +81)</mat-card-subtitle>
   </mat-card-header>
 
   <mat-card-content>
@@ -17,8 +17,7 @@
         <input matInput placeholder="Full Name" [formControl]="fullName" name="name" autocomplete="name" />
       </mat-form-field>
       <mat-form-field>
-        <input matInput placeholder="E-mail" [formControl]="email" type="email" email name="email"
-          autocomplete="username email" />
+        <input matInput placeholder="Phone Number" [formControl]="phone_number" type="tel" name="phone_number" autocomplete="tel" />
       </mat-form-field>
     </form>
   </mat-card-content>
