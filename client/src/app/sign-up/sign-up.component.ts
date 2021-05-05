@@ -8,31 +8,39 @@ import { AuthService } from '../auth.service';
 import { BehaviorSubject } from 'rxjs';
 
 @Component({
-  selector: 'app-sign-up',
-  templateUrl: './sign-up.component.html',
-  styleUrls: ['./sign-up.component.css'],
+  selector: "app-sign-up",
+  templateUrl: "./sign-up.component.html",
+  styleUrls: ["./sign-up.component.css"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignUpComponent {
-
-  phone_number = new FormControl('');
-  fullName = new FormControl('');
+  firstName = new FormControl("");
+  lastName = new FormControl("");
+  email = new FormControl("");
+  phoneNumber = new FormControl("");
+  birthdate = new FormControl("");
 
   private busy_ = new BehaviorSubject(false);
   public busy = this.busy_.asObservable();
 
-  private errorMessage_ = new BehaviorSubject('');
+  private errorMessage_ = new BehaviorSubject("");
   public errorMessage = this.errorMessage_.asObservable();
 
-  constructor(private router: Router, private auth: AuthService) { }
+  constructor(private router: Router, private auth: AuthService) {}
 
   public async signup() {
-    this.errorMessage_.next('');
+    this.errorMessage_.next("");
     this.busy_.next(true);
     try {
-      await this.auth.signUp(this.phone_number.value, this.fullName.value);
-      await this.auth.signIn(this.phone_number.value);
-      this.router.navigate(['/enter-secret-code']);
+      await this.auth.signUp(
+        this.phoneNumber.value, 
+        this.firstName.value,
+        this.lastName.value,
+        this.email.value,
+        this.birthdate.value
+      );
+      await this.auth.signIn(this.phoneNumber.value);
+      this.router.navigate(["/enter-secret-code"]);
     } catch (err) {
       console.log(err);
       this.errorMessage_.next(err.message || err);

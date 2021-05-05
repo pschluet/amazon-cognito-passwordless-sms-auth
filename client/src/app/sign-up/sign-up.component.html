@@ -14,10 +14,19 @@
   <mat-card-content>
     <form fxLayout="column">
       <mat-form-field>
-        <input matInput placeholder="Full Name" [formControl]="fullName" name="name" autocomplete="name" />
+        <input matInput placeholder="First Name" [formControl]="firstName" name="firstName" autocomplete="firstName" />
       </mat-form-field>
       <mat-form-field>
-        <input matInput placeholder="Phone Number" [formControl]="phone_number" type="tel" name="phone_number" autocomplete="tel" />
+        <input matInput placeholder="Last Name" [formControl]="lastName" name="lastName" autocomplete="lastName" />
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Email Address" [formControl]="email" name="email" autocomplete="email" />
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Mobile Number" [formControl]="phoneNumber" type="tel" name="phoneNumber" autocomplete="tel" />
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Birthdate" [formControl]="birthdate" name="birthDate" autocomplete="date" />
       </mat-form-field>
     </form>
   </mat-card-content>
