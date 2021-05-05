@@ -37,8 +37,8 @@ export class AnswerChallengeComponent implements OnInit, OnDestroy, AfterContent
 
   private allSubscriptions = new Subscription();
 
-  private email_ = new BehaviorSubject('');
-  public email = this.email_.asObservable();
+  private phoneNumber_ = new BehaviorSubject('');
+  public phoneNumber = this.phoneNumber_.asObservable();
 
   constructor(private auth: AuthService, private router: Router) { }
 
@@ -47,7 +47,7 @@ export class AnswerChallengeComponent implements OnInit, OnDestroy, AfterContent
     // Get e-mail address the code was sent to
     // It is a public challenge parameter so let's try it that way
     this.auth.getPublicChallengeParameters()
-      .then(param => this.email_.next(param.email));
+      .then(param => this.phoneNumber_.next(param.phone_number));
 
     // Move focus to next field upon entry of a digit
     [2, 3, 4, 5, 6].forEach(digit => {
